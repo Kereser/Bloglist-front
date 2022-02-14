@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -22,18 +22,32 @@ const App = () => {
     fetchedData()
   }, [])
 
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem('loggedUser')
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser)
+      setUser(user)
+    }
+  }, [])
+
   const handleSubmit = async e => {
     e.preventDefault()
 
     try {
       const user = await loginService.login({ username, password })
-
+      console.log(user)
       setUser(user)
-      window.localStorage.setItem('loggedUser', user.token)
-
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      setUsername('')
+      setPassword('')
     } catch (exception) {
       console.error(exception)
     }
+  }
+
+  const handleLogOut = () => {
+    window.localStorage.clear()
+    setUser(null)
   }
 
   return (
@@ -41,24 +55,19 @@ const App = () => {
       {
         user === null
           ?
-          <div>
-            <h2>Log in to application</h2>
-            <LoginForm
-              username={username}
-              handleChangeUsername={({ target }) => setUsername(target.value)}
-              password={password}
-              handleChangePassword={({ target }) => setPassword(target.value)}
-              handleSubmit={handleSubmit}
-            />
-          </div>
+          <LoginForm
+            username={username}
+            handleChangeUsername={({ target }) => setUsername(target.value)}
+            password={password}
+            handleChangePassword={({ target }) => setPassword(target.value)}
+            handleSubmit={handleSubmit}
+          />
           :
-          <div>
-            <h2>blogs</h2>
-            <p>{user.name} logged in</p>
-            {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
-            )}
-          </div>
+          <Blogs
+            user={user}
+            handleLogOut={handleLogOut}
+            blogs={blogs}
+          />
       }
 
     </div>
