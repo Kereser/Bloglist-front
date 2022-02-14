@@ -1,10 +1,15 @@
 import Blog from './Blog'
+import CreateBlog from './CreateBlog'
 
-const Blogs = ({ user, handleLogOut, blogs }) => {
+const Blogs = ({ user, handleLogOut, blogs, setBlogs }) => {
   return (
     <div>
       <h2>blogs</h2>
       <p>{user.name} logged in <button onClick={handleLogOut}>Logout</button></p>
+      <CreateBlog 
+        blogs={blogs}
+        setBlogs={setBlogs}
+      />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}

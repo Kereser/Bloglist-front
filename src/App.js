@@ -35,9 +35,9 @@ const App = () => {
 
     try {
       const user = await loginService.login({ username, password })
-      console.log(user)
       setUser(user)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -67,6 +67,7 @@ const App = () => {
             user={user}
             handleLogOut={handleLogOut}
             blogs={blogs}
+            setBlogs={setBlogs}
           />
       }
 
