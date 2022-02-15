@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
+import Notification from './components/Notifications'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -9,6 +10,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [notification, setNotification] = useState({ message: null, state: null })
 
   useEffect(() => {
     async function fetchedData() {
@@ -27,6 +29,7 @@ const App = () => {
     if (loggedUser) {
       const user = JSON.parse(loggedUser)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -41,7 +44,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.error(exception)
+      setNotification({ message: 'Wrong username or password', state: 'failed' })
+      setTimeout(() => {
+        setNotification({ message: null, state: null })
+      }, 5000)
     }
   }
 
@@ -55,20 +61,27 @@ const App = () => {
       {
         user === null
           ?
-          <LoginForm
-            username={username}
-            handleChangeUsername={({ target }) => setUsername(target.value)}
-            password={password}
-            handleChangePassword={({ target }) => setPassword(target.value)}
-            handleSubmit={handleSubmit}
-          />
+          <div>
+            <Notification notification={notification} />
+            <LoginForm
+              username={username}
+              handleChangeUsername={({ target }) => setUsername(target.value)}
+              password={password}
+              handleChangePassword={({ target }) => setPassword(target.value)}
+              handleSubmit={handleSubmit}
+            />
+          </div>
           :
-          <Blogs
-            user={user}
-            handleLogOut={handleLogOut}
-            blogs={blogs}
-            setBlogs={setBlogs}
-          />
+          <div>
+            <Notification notification={notification} />
+            <Blogs
+              user={user}
+              handleLogOut={handleLogOut}
+              blogs={blogs}
+              setBlogs={setBlogs}
+              setNotification={setNotification}
+            />
+          </div>
       }
 
     </div>
