@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import blogService from '../services/blogs'
 
-const CreateBlog = ({ blogs, setBlogs, setNotification }) => {
+const CreateBlog = ({ createBlog }) => {
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -16,24 +15,10 @@ const CreateBlog = ({ blogs, setBlogs, setNotification }) => {
       url
     }
 
-    try {
-      const createdBlog = await blogService.createBlog(newBlog)
-      setBlogs(blogs.concat(createdBlog))
-      setTitle('')
-      setUrl('')
-      setAuthor('')
-      setNotification({ message: `Blog ${title} by ${author} has been successfully created.`, state: 'success'})
-      setTimeout(() => {
-        setNotification({ message: null, state: null })
-      }, 5000)
-    } catch (exception) {
-      console.error(exception)
-      setNotification({ message: `Blog ${title} by ${author} could not be created.`, state: 'failed'})
-      setTimeout(() => {
-        setNotification({ message: null, state: null})
-      }, 5000)
-    }
-
+    createBlog(newBlog)
+    setTitle('')
+    setUrl('')
+    setAuthor('')
   }
 
   return (
@@ -67,7 +52,6 @@ const CreateBlog = ({ blogs, setBlogs, setNotification }) => {
         <button type="Submit">Create</button>
       </form>
     </div>
-
   )
 }
 

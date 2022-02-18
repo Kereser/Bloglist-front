@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
 import Notification from './components/Notifications'
 import LoginForm from './components/LoginForm'
+import Toggleable from './components/Toggleable'
+import CreateBlog from './components/CreateBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -33,16 +35,12 @@ const App = () => {
     }
   }, [])
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-
+  const newLoggin = async newUser => {
     try {
-      const user = await loginService.login({ username, password })
+      const user = await loginService.login(newUser)
       setUser(user)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       setNotification({ message: 'Wrong username or password', state: 'failed' })
       setTimeout(() => {
@@ -56,31 +54,56 @@ const App = () => {
     setUser(null)
   }
 
+  const addNewBlog = async newBlog => {
+    try {
+      const createdBlog = await blogService.createBlog(newBlog)
+      setBlogs(blogs.concat(createdBlog))
+      setNotification({
+        message: `Blog '${newBlog.title}' by '${newBlog.author}' successfully created`,
+        state: 'success',
+      })
+      setTimeout(() => {
+        setNotification({
+          message: null,
+          state: null,
+        })
+      }, 5000)
+    } catch (exception) {
+      console.error(exception)
+      setNotification({
+        message: 'Blog could not be created.',
+        state: 'failed'
+      })
+      setTimeout(() => {
+        setNotification({
+          message: null,
+          state: null,
+        })
+      }, 5000)
+    }
+  }
+
   return (
     <div>
+      <Notification notification={notification} />
       {
         user === null
           ?
           <div>
-            <Notification notification={notification} />
             <LoginForm
-              username={username}
-              handleChangeUsername={({ target }) => setUsername(target.value)}
-              password={password}
-              handleChangePassword={({ target }) => setPassword(target.value)}
-              handleSubmit={handleSubmit}
+              newLoggin={newLoggin}
             />
           </div>
           :
           <div>
-            <Notification notification={notification} />
-            <Blogs
-              user={user}
-              handleLogOut={handleLogOut}
-              blogs={blogs}
-              setBlogs={setBlogs}
-              setNotification={setNotification}
-            />
+            <h2>blogs</h2>
+            <p>{user.name} logged in <button onClick={handleLogOut}>Logout</button></p>
+            <Toggleable>
+              <CreateBlog
+                createBlog={addNewBlog}
+              />
+            </Toggleable>
+            <Blogs blogs={blogs} />
           </div>
       }
     </div>

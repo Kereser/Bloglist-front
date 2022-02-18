@@ -2,7 +2,8 @@
   font-size: 25px;
   color: #000;
   font-family: cursive;
-  border: 1px solid red;
+  border: 3px solid red;
+  border-radius: 6px;
   background: #ddd;
 }
 
@@ -10,6 +11,7 @@
   font-size: 25px;
   color: #000;
   font-family: cursive;
-  border: 1px solid green;
+  border: 3px solid green;
+  border-radius: 6px;
   background: #ddd;
 }
