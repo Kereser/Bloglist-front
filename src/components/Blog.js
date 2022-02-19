@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 const Blog = ({ blog, updateBlog }) => {
+  console.log(blog.user.id)
   const [show, setShow] = useState(false)
 
   const styledBlog = {
