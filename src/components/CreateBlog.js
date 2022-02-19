@@ -6,7 +6,7 @@ const CreateBlog = ({ createBlog }) => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
 
     const newBlog = {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import Notification from './components/Notifications'
 import LoginForm from './components/LoginForm'
@@ -10,8 +10,6 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [notification, setNotification] = useState({ message: null, state: null })
 
   useEffect(() => {
@@ -54,8 +52,11 @@ const App = () => {
     setUser(null)
   }
 
+  const createBlogRef = useRef()
+
   const addNewBlog = async newBlog => {
     try {
+      createBlogRef.current.toggleVisible()
       const createdBlog = await blogService.createBlog(newBlog)
       setBlogs(blogs.concat(createdBlog))
       setNotification({
@@ -83,6 +84,21 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (id, newBlog) => {
+    try {
+      const updatedBlog = blogService.updateBlog(id, newBlog)
+      const newBlogs = blogs.map(b =>
+        b.id === updatedBlog.id ? updatedBlog : b)
+      setBlogs(newBlogs)
+    } catch (exception) {
+      console.error('There were an error in updatingBlog.')
+      setNotification({
+        message: 'We could not update the blog.',
+        state: 'failed',
+      })
+    }
+  }
+
   return (
     <div>
       <Notification notification={notification} />
@@ -98,12 +114,15 @@ const App = () => {
           <div>
             <h2>blogs</h2>
             <p>{user.name} logged in <button onClick={handleLogOut}>Logout</button></p>
-            <Toggleable>
+            <Toggleable ref={createBlogRef}>
               <CreateBlog
                 createBlog={addNewBlog}
               />
             </Toggleable>
-            <Blogs blogs={blogs} />
+            <Blogs
+              blogs={blogs}
+              updateBlog={updateBlog}
+            />
           </div>
       }
     </div>
