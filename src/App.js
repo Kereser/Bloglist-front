@@ -99,6 +99,19 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (id, sendedToken) => {
+    try {
+      const token = blogService.setToken(sendedToken)
+      await blogService.removeBlog(id, token)
+      const newBlogs = blogs.filter(b => {
+        return b.id !== id
+      })
+      setBlogs(newBlogs)
+    } catch (exception) {
+      console.error(exception)
+    }
+  }
+
   return (
     <div>
       <Notification notification={notification} />
@@ -122,6 +135,7 @@ const App = () => {
             <Blogs
               blogs={blogs}
               updateBlog={updateBlog}
+              removeBlog={removeBlog}
             />
           </div>
       }
