@@ -1,4 +1,5 @@
-import { useState } from "react"
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, updateBlog, removeBlog }) => {
   const [show, setShow] = useState(false)
@@ -50,7 +51,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
   const blogToShow = show
     ?
-    <p style={{ margin: 4}}>
+    <p style={{ margin: 4 }}>
       TITLE: {blog.title}{button()} <br />
       URL: {blog.url} <br />
       LIKES: {blog.likes} <button onClick={handleLikes}>Like</button> <br />
@@ -58,8 +59,8 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       {eliminationButton()}
     </p>
     :
-    <p style={{ margin: 4}}>
-      '{blog.title}' by '{blog.author}'
+    <p style={{ margin: 4 }}>
+      &apos;{blog.title}&apos; by &apos;{blog.author}&apos;
       {button()}
     </p>
 
@@ -68,6 +69,11 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       {blogToShow}
     </div>
   )
+}
+
+Blog.propTypes = {
+  updateBlog: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired
 }
 
 export default Blog

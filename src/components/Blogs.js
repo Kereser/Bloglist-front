@@ -1,3 +1,4 @@
+import React from 'react'
 import Blog from './Blog'
 
 const Blogs = ({ blogs, updateBlog, removeBlog }) => {
@@ -9,12 +10,12 @@ const Blogs = ({ blogs, updateBlog, removeBlog }) => {
     <div>
       {
         sortedBlogs.map(blog =>
-        <Blog 
-          key={blog.id} 
-          blog={blog} 
-          updateBlog={updateBlog}
-          removeBlog={removeBlog}
-        />)
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            removeBlog={removeBlog}
+          />)
       }
     </div>
   )

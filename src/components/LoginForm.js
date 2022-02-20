@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const LoginForm = ({ newLoggin }) => {
   const [username, setUsername] = useState('')
@@ -41,6 +42,10 @@ const LoginForm = ({ newLoggin }) => {
       </form>
     </div>
   )
+}
+
+LoginForm.prototype = {
+  newLoggin: PropTypes.func.isRequired
 }
 
 export default LoginForm
