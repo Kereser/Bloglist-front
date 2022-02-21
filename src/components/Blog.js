@@ -65,7 +65,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
     </p>
 
   return (
-    <div style={styledBlog}>
+    <div style={styledBlog} className='blogInfo'>
       {blogToShow}
     </div>
   )

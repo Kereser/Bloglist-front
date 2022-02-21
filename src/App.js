@@ -37,6 +37,7 @@ const App = () => {
     try {
       const user = await loginService.login(newUser)
       setUser(user)
+      console.log(user)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
     } catch (exception) {
