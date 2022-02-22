@@ -17,9 +17,12 @@ describe('reviewing blogs', () => {
     user: { username: 'Super5', name: 'Supasupa5', id: '620895d747d151937cb6b367' }
   }
 
+  const removeBlogMock = jest.fn()
+  const updateBlogMock = jest.fn()
+
   beforeEach(() => {
     component = render(
-      <Blog blog={blogs} />
+      <Blog blog={blogs} updateBlog={updateBlogMock} removeBlog={removeBlogMock}/>
     )
   })
 
@@ -69,5 +72,16 @@ describe('reviewing blogs with functions', () => {
     const infoDisplayed = component.container.querySelector('.blogInfo')
     expect(infoDisplayed).toHaveTextContent('http://ProfeSuperPerrOn.com.co')
     expect(infoDisplayed).toHaveTextContent(40011)
+  })
+
+  test('Press two times like button', () => {
+    const buttonShow = component.getByText('Show')
+    fireEvent.click(buttonShow)
+
+    const button = component.getByText('Like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+
+    expect(updateBlogMock.mock.calls.length).toBe(2)
   })
 })
