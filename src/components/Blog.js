@@ -43,7 +43,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
   const button = () => {
     return (
-      <button onClick={() => setShow(!show)} style={buttonStyle}>
+      <button id='button-ShowHide' onClick={() => setShow(!show)} style={buttonStyle}>
         {show ? 'Hide' : 'Show'}
       </button>
     )
@@ -52,10 +52,15 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   const blogToShow = show
     ?
     <p style={{ margin: 4 }}>
-      TITLE: {blog.title}{button()} <br />
-      URL: {blog.url} <br />
-      LIKES: {blog.likes} <button onClick={handleLikes}>Like</button> <br />
-      AUTHOR: {blog.author} <br />
+      <span>TITLE: {blog.title} </span> {button()} <br />
+      <span>URL: {blog.url} </span> <br />
+      <span>LIKES: <b>{blog.likes}</b> </span>
+      <button
+        id='button-like'
+        onClick={handleLikes}>Like
+      </button>
+      <br />
+      <span>AUTHOR: {blog.author} </span> <br />
       {eliminationButton()}
     </p>
     :

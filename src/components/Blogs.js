@@ -7,7 +7,7 @@ const Blogs = ({ blogs, updateBlog, removeBlog }) => {
     return b.likes - a.likes
   })
   return (
-    <div>
+    <div id='blogs-container'>
       {
         sortedBlogs.map(blog =>
           <Blog
